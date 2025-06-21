@@ -14,22 +14,31 @@ Upload your CSV file and select what you want to explore from the dropdown menu 
 This tool helps you analyze your dataset quickly and interactively 🚀
 """)
 
-# Upload CSV File
-uploaded_file = st.file_uploader("📂 Upload CSV", type=["csv", "xlsx", "xls"])
+uploaded_file = st.file_uploader("📂 Upload your file", type=["csv", "xlsx", "xls", "txt"])
 
-
-try:
+if uploaded_file is not None:
+    # ✅ Now it's safe to access .name
     filename = uploaded_file.name
     file_ext = os.path.splitext(filename)[1].lower()
-    if file_ext == ".csv":
-        df = pd.read_csv(uploaded_file)
-    elif file_ext in [".xlsx", ".xls"]:
-        df = pd.read_excel(uploaded_file)
-    else:
-        st.error("Unsupported file format.")
-        st.stop()
 
-    st.success(f"✅ File '{filename}' uploaded and processed successfully!")
+    try:
+        if file_ext == ".csv":
+            df = pd.read_csv(uploaded_file)
+        elif file_ext in [".xlsx", ".xls"]:
+            df = pd.read_excel(uploaded_file)
+        elif file_ext == ".txt":
+            df = pd.read_csv(uploaded_file, delimiter="\t")
+        else:
+            st.error("❌ Unsupported file format.")
+            st.stop()
+
+        st.success(f"✅ File '{filename}' uploaded and processed successfully!")
+
+        # 🔁 Continue with dropdown and features...
+
+    except Exception as e:
+        st.error(f"❌ Failed to load file: {e}")
+        st.stop()
 
 
     # Navigation Dropdown
@@ -142,6 +151,5 @@ try:
         - Duplicate Rows: `{df.duplicated().sum()}`
         """)
 
-except Exception as e:
-    st.error(f"Failed to load file: {e}")
-    st.stop()
+else:
+    st.info("📂 Please upload a file to get started.")
