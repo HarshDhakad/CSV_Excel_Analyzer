@@ -14,10 +14,9 @@ Upload your CSV file and select what you want to explore from the dropdown menu 
 This tool helps you analyze your dataset quickly and interactively 🚀
 """)
 
-uploaded_file = st.file_uploader("📂 Upload your file", type=["csv", "xlsx", "xls", "txt"])
+uploaded_file = st.file_uploader("📂 Upload your file", type=["csv", "xlsx", "xls"])
 
 if uploaded_file is not None:
-    # ✅ Now it's safe to access .name
     filename = uploaded_file.name
     file_ext = os.path.splitext(filename)[1].lower()
 
@@ -26,15 +25,11 @@ if uploaded_file is not None:
             df = pd.read_csv(uploaded_file)
         elif file_ext in [".xlsx", ".xls"]:
             df = pd.read_excel(uploaded_file)
-        elif file_ext == ".txt":
-            df = pd.read_csv(uploaded_file, delimiter="\t")
         else:
             st.error("❌ Unsupported file format.")
             st.stop()
 
         st.success(f"✅ File '{filename}' uploaded and processed successfully!")
-
-        # 🔁 Continue with dropdown and features...
 
     except Exception as e:
         st.error(f"❌ Failed to load file: {e}")
@@ -152,4 +147,4 @@ if uploaded_file is not None:
         """)
 
 else:
-    st.info("📂 Please upload a file to get started.")
+    st.info("Please upload a CSV or Excel file")
