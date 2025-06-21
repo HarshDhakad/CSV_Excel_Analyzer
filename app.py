@@ -34,7 +34,7 @@ if data_source == "Upload File":
             st.error(f"❌ Failed to load file: {e}")
 
 elif data_source == "Use Sample Dataset":
-    st.info("Using Sample Dataset: Email Spam")
+    st.info("Using Sample Dataset: Movies Dataset")
     df = pd.read_csv("Sample_Dataset.csv")  
     st.success("✅ Sample dataset loaded successfully!")
     
